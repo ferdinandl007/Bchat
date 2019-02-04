@@ -11,16 +11,20 @@ import 'package:flutter_chat_demo/login.dart';
 import 'package:flutter_chat_demo/settings.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+// sets the entry point in their application
 void main() => runApp(new MyApp());
 
 class MainScreen extends StatefulWidget {
   final String currentUserId;
-
+// servers initialising a main home screen
   MainScreen({Key key, @required this.currentUserId}) : super(key: key);
 
   @override
   State createState() => new MainScreenState(currentUserId: currentUserId);
 }
+
+
+//  class  where we do all the necessary configuration and start designing UI
 
 class MainScreenState extends State<MainScreen> {
   MainScreenState({Key key, @required this.currentUserId});
@@ -32,12 +36,13 @@ class MainScreenState extends State<MainScreen> {
     const Choice(title: 'Settings', icon: Icons.settings),
     const Choice(title: 'Log out', icon: Icons.exit_to_app),
   ];
-
+//  feature  which holds
   Future<bool> onBackPress() {
     openDialog();
     return Future.value(false);
   }
 
+  // here we do button configuration
   Future<Null> openDialog() async {
     switch (await showDialog(
         context: context,
@@ -45,6 +50,7 @@ class MainScreenState extends State<MainScreen> {
           return SimpleDialog(
             contentPadding:
                 EdgeInsets.only(left: 0.0, right: 0.0, top: 0.0, bottom: 0.0),
+            //   configuring the exit button
             children: <Widget>[
               Container(
                 color: themeColor,
@@ -127,6 +133,7 @@ class MainScreenState extends State<MainScreen> {
         break;
     }
   }
+  // configuring  the chat cell  with all necessary information such as picture URL
 
   Widget buildItem(BuildContext context, DocumentSnapshot document) {
     if (document['id'] == currentUserId) {
@@ -161,6 +168,7 @@ class MainScreenState extends State<MainScreen> {
                     children: <Widget>[
                       new Container(
                         child: Text(
+                          //  sets the text property nickname  within the nickname of the chat bubble
                           'Nickname: ${document['nickname']}',
                           style: TextStyle(color: primaryColor),
                         ),
@@ -200,7 +208,7 @@ class MainScreenState extends State<MainScreen> {
       );
     }
   }
-
+//  is handled is Google signing
   final GoogleSignIn googleSignIn = new GoogleSignIn();
 
   void onItemMenuPress(Choice choice) {
@@ -231,6 +239,7 @@ class MainScreenState extends State<MainScreen> {
   }
 
   @override
+  //  this widget is responsible to display  the main text  on the home page
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -266,12 +275,14 @@ class MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
+      //  this configures the necessary information which we get from the database such as username et cetera
       body: WillPopScope(
         child: Stack(
           children: <Widget>[
             // List
             Container(
               child: StreamBuilder(
+                
                 stream: Firestore.instance.collection('users').snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
