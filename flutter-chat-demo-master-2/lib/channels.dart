@@ -10,96 +10,44 @@ import 'package:flutter_chat_demo/const.dart';
 import 'package:flutter_chat_demo/login.dart';
 import 'package:flutter_chat_demo/settings.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_chat_demo/channels.dart';
 
-// sets the entry point in their application
-void main() => runApp(new MyApp());
+import 'package:flutter_chat_demo/main.dart';
+//class MainScreen extends StatefulWidget {
+//  final String currentUserId;
+//
+//  MainScreen({Key key, @required this.currentUserId}) : super(key: key);
 
-class MainScreen extends StatefulWidget {
+//  @override
+//  State createState() => new MainScreenState(
+//      currentUserId: currentUserId);
+//}
+
+
+class Channels extends State<MainScreen> {
+  Channels({Key key, @required this.currentUserId});
+
   final String currentUserId;
-<<<<<<< HEAD
-
-
-=======
-// servers initialising a main home screen
->>>>>>> 184e65c60d661626804cf4595094bbd98ad41658
-  MainScreen({Key key, @required this.currentUserId}) : super(key: key);
-
-  @override
-  State createState() => new Channels(
-      // ignore: return_of_invalid_type, return_of_invalid_type
-      currentUserId: currentUserId);
-}
-
-
-
-
-class Main extends StatelessWidget {
-  final String currentUserId;
-  final String name;
-  Main({Key key, @required this.currentUserId, this.name}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      body: new MainScreenss(
-        currentUserId: this.currentUserId,
-      ),
-    );
-  }
-}
-
-class MainScreenss extends StatefulWidget {
-  final String currentUserId;
-  final String name;
-  MainScreenss({Key key, @required this.currentUserId,this.name}) : super(key: key);
-
-  @override
-  State createState() => new MainScreenStatess(currentUserId: this.currentUserId,name: this.name);
-}
-
-<<<<<<< HEAD
-=======
-
-//  class  where we do all the necessary configuration and start designing UI
-
-class MainScreenState extends State<MainScreen> {
-  MainScreenState({Key key, @required this.currentUserId});
->>>>>>> 184e65c60d661626804cf4595094bbd98ad41658
-
-
-
-class MainScreenStatess extends State<MainScreenss> {
-  final String name;
-  final String currentUserId;
-
-  MainScreenStatess({Key key, @required this.currentUserId, this.name});
-
-
 
   bool isLoading = false;
   List<Choice> choices = const <Choice>[
     const Choice(title: 'Settings', icon: Icons.settings),
-    const Choice(title: ' but', icon: Icons.exit_to_app),
+    const Choice(title: 'Log out', icon: Icons.exit_to_app),
   ];
-//  feature  which holds
+
   Future<bool> onBackPress() {
-    Navigator.pop(context);
+    openDialog();
     return Future.value(false);
   }
 
-  // here we do button configuration
   Future<Null> openDialog() async {
     switch (await showDialog(
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
             contentPadding:
-                EdgeInsets.only(left: 0.0, right: 0.0, top: 0.0, bottom: 0.0),
-            //   configuring the exit button
+            EdgeInsets.only(left: 0.0, right: 0.0, top: 0.0, bottom: 0.0),
             children: <Widget>[
               Container(
-                color: themeColor,
                 margin: EdgeInsets.all(0.0),
                 padding: EdgeInsets.only(bottom: 10.0, top: 10.0),
                 height: 100.0,
@@ -173,7 +121,6 @@ class MainScreenStatess extends State<MainScreenss> {
         break;
     }
   }
-  // configuring  the chat cell  with all necessary information such as picture URL
 
 
 
@@ -218,15 +165,14 @@ class MainScreenStatess extends State<MainScreenss> {
                     children: <Widget>[
                       new Container(
                         child: Text(
-                          //  sets the text property nickname  within the nickname of the chat bubble
-                          'Nickname: ${document['nickname']}',
+                          'Name: ${document['name']}',
                         ),
                         alignment: Alignment.centerLeft,
                         margin: new EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
                       ),
                       new Container(
                         child: Text(
-                          'About me: ${document['aboutMe'] ?? 'Not available'}',
+                          'About me: ${document['about'] ?? 'Not available'}',
 
                         ),
                         alignment: Alignment.centerLeft,
@@ -243,27 +189,26 @@ class MainScreenStatess extends State<MainScreenss> {
             Navigator.push(
                 context,
                 new MaterialPageRoute(
-                    builder: (context) => new Chat(
-                          peerId: document.documentID,
-                          peerAvatar: document['photoUrl'],
-                        )));
+                    builder: (context) => new Main(
+                      currentUserId: this.currentUserId,name: '${document['name']}',
+                    )));
           },
           color: Colors.black54,
 
           padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(7.0)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(7.0)),
         ),
         margin: EdgeInsets.only(bottom: 10.0, left: 5.0, right: 5.0),
       );
     }
   }
-//  is handled is Google signing
+
   final GoogleSignIn googleSignIn = new GoogleSignIn();
 
   void onItemMenuPress(Choice choice) {
     if (choice.title == 'Log out') {
-      Navigator.pop(context);
+      handleSignOut();
     } else {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Settings()));
@@ -285,16 +230,15 @@ class MainScreenStatess extends State<MainScreenss> {
 
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => MyApp()),
-        (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
   }
 
   @override
-  //  this widget is responsible to display  the main text  on the home page
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Group",
+          'Channels',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -323,15 +267,13 @@ class MainScreenStatess extends State<MainScreenss> {
           ),
         ],
       ),
-      //  this configures the necessary information which we get from the database such as username et cetera
       body: WillPopScope(
         child: Stack(
           children: <Widget>[
             // List
             Container(
               child: StreamBuilder(
-                
-                stream: Firestore.instance.collection('users').snapshots(),
+                stream: Firestore.instance.collection('channels').snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(
@@ -355,13 +297,13 @@ class MainScreenStatess extends State<MainScreenss> {
             Positioned(
               child: isLoading
                   ? Container(
-                      child: Center(
-                        child: CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(themeColor)),
-                      ),
-                      color: Colors.white.withOpacity(0.8),
-                    )
+                child: Center(
+                  child: CircularProgressIndicator(
+                      valueColor:
+                      AlwaysStoppedAnimation<Color>(themeColor)),
+                ),
+                color: Colors.white.withOpacity(0.8),
+              )
                   : Container(),
             )
           ],

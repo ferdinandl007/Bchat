@@ -14,9 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Chat Demo',
-      theme: new ThemeData(
-        primaryColor: themeColor,
-      ),
+      theme: ThemeData.dark(),
       home: LoginScreen(title: 'CHAT DEMO'),
       debugShowCheckedModeBanner: false,
     );
