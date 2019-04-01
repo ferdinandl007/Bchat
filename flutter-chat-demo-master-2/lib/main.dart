@@ -10,6 +10,7 @@ import 'package:flutter_chat_demo/const.dart';
 import 'package:flutter_chat_demo/login.dart';
 import 'package:flutter_chat_demo/settings.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_chat_demo/channels.dart';
 
 // sets the entry point in their application
 void main() => runApp(new MyApp());
@@ -20,13 +21,46 @@ class MainScreen extends StatefulWidget {
   MainScreen({Key key, @required this.currentUserId}) : super(key: key);
 
   @override
-  State createState() => new MainScreenState(currentUserId: currentUserId);
+  State createState() => new Channels(currentUserId: currentUserId);
 }
+
+
+
+
+class Screen extends StatelessWidget {
+  final String currentUserId;
+
+  Screen({Key key, @required this.currentUserId}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      body: new MainScreenStatess(
+
+      ),
+    );
+  }
+}
+
+class MainScreenStatess extends StatefulWidget {
+  final String currentUserId;
+
+  MainScreenStatess({Key key, @required this.currentUserId}) : super(key: key);
+
+  @override
+  State createState() => new MainScreenState(currentUserId: this.currentUserId);
+}
+
+
+
+
+
+
 
 
 //  class  where we do all the necessary configuration and start designing UI
 
-class MainScreenState extends State<MainScreen> {
+class MainScreenState extends State<MainScreenStatess> {
   MainScreenState({Key key, @required this.currentUserId});
 
   final String currentUserId;
@@ -38,7 +72,7 @@ class MainScreenState extends State<MainScreen> {
   ];
 //  feature  which holds
   Future<bool> onBackPress() {
-    openDialog();
+    Navigator.pop(context);
     return Future.value(false);
   }
 
@@ -53,7 +87,6 @@ class MainScreenState extends State<MainScreen> {
             //   configuring the exit button
             children: <Widget>[
               Container(
-                color: themeColor,
                 margin: EdgeInsets.all(0.0),
                 padding: EdgeInsets.only(bottom: 10.0, top: 10.0),
                 height: 100.0,
@@ -90,14 +123,12 @@ class MainScreenState extends State<MainScreen> {
                     Container(
                       child: Icon(
                         Icons.cancel,
-                        color: primaryColor,
                       ),
                       margin: EdgeInsets.only(right: 10.0),
                     ),
                     Text(
                       'CANCEL',
-                      style: TextStyle(
-                          color: primaryColor, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
@@ -111,14 +142,12 @@ class MainScreenState extends State<MainScreen> {
                     Container(
                       child: Icon(
                         Icons.check_circle,
-                        color: primaryColor,
                       ),
                       margin: EdgeInsets.only(right: 10.0),
                     ),
                     Text(
                       'YES',
-                      style: TextStyle(
-                          color: primaryColor, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
@@ -140,6 +169,10 @@ class MainScreenState extends State<MainScreen> {
       return Container();
     } else {
       return Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(7.0),
+        ),
         child: FlatButton(
           child: Row(
             children: <Widget>[
@@ -169,16 +202,14 @@ class MainScreenState extends State<MainScreen> {
                       new Container(
                         child: Text(
                           //  sets the text property nickname  within the nickname of the chat bubble
-                          'Nickname: ${document['nickname']}',
-                          style: TextStyle(color: primaryColor),
+                          'Nickname: ${document['nickname']}'
                         ),
                         alignment: Alignment.centerLeft,
                         margin: new EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
                       ),
                       new Container(
                         child: Text(
-                          'About me: ${document['aboutMe'] ?? 'Not available'}',
-                          style: TextStyle(color: primaryColor),
+                          'About me: ${document['aboutMe'] ?? 'Not available'}'
                         ),
                         alignment: Alignment.centerLeft,
                         margin: new EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
@@ -199,7 +230,6 @@ class MainScreenState extends State<MainScreen> {
                       peerAvatar: document['photoUrl'],
                     )));
           },
-          color: greyColor2,
           padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
           shape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -245,7 +275,7 @@ class MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         title: Text(
           'MAIN',
-          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: <Widget>[
@@ -258,15 +288,13 @@ class MainScreenState extends State<MainScreen> {
                     child: Row(
                       children: <Widget>[
                         Icon(
-                          choice.icon,
-                          color: primaryColor,
+                          choice.icon
                         ),
                         Container(
                           width: 10.0,
                         ),
                         Text(
-                          choice.title,
-                          style: TextStyle(color: primaryColor),
+                          choice.title
                         ),
                       ],
                     ));
